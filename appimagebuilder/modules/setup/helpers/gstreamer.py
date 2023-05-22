@@ -54,14 +54,21 @@ class GStreamer(BaseHelper):
 
     def _generate_gst_registry(self, env):
         gst_launch_bin = shutil.which("gst-launch-1.0")
+        print("GST-LAUNCH-BIN:", gst_launch_bin)
         if gst_launch_bin and "GST_PLUGIN_PATH" in env:
             env.set("GST_REGISTRY", env["GST_PLUGIN_PATH"] + "/registry.bin")
 
+            for key in sorted(env.keys()):
+                print(f"ENV: {key}={env[key]}")
+
             gst_launch_env = self._prepare_gst_launch_env(env)
+            for key in sorted(gst_launch_env.keys()):
+                print(f"GST-LAUNCH-ENV: {key}={gst_launch_env[key]}")
+
             # run gst "diagnostic" to force registry generation
             # https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html?gi-language=c#diagnostic
             proc = subprocess.run(
-                [gst_launch_bin, "fakesrc", "num-buffers=16", "!", "fakesink"],
+                ["strace", "-e", "trace=open,openat", gst_launch_bin, "--gst-disable-registry-fork", "fakesrc", "num-buffers=16", "!", "fakesink"],
                 env=gst_launch_env,
             )
             if proc.returncode == 0:

@@ -62,6 +62,10 @@ class GStreamer(BaseHelper):
                 print(f"ENV: {key}={env[key]}")
 
             gst_launch_env = self._prepare_gst_launch_env(env)
+
+            gst_launch_env["GST_REGISTRY_REUSE_PLUGIN_SCANNER"] = "yes"
+            gst_launch_env["GST_DISABLE_REGISTRY_FORK"] = "1"
+
             for key in sorted(gst_launch_env.keys()):
                 print(f"GST-LAUNCH-ENV: {key}={gst_launch_env[key]}")
 

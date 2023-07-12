@@ -55,6 +55,7 @@ class GStreamer(BaseHelper):
     def _generate_gst_registry(self, env):
         gst_launch_bin = shutil.which("gst-launch-1.0")
         print(env)
+        print(env.serialize())
         if gst_launch_bin and "GST_PLUGIN_PATH" in env:
             env.set("GST_REGISTRY", env["GST_PLUGIN_PATH"] + "/registry.bin")
 

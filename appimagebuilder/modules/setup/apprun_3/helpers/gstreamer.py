@@ -61,6 +61,7 @@ class AppRun3GStreamer(AppRun3Helper):
             self.context.runtime_env["GST_REGISTRY"] = gst_registry_path.__str__()
 
             gst_launch_env = self._prepare_gst_launch_env()
+            print(gst_launch_env)
             # run gst "diagnostic" to force registry generation
             # https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html?gi-language=c#diagnostic
             proc = subprocess.run(

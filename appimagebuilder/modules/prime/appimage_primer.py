@@ -76,6 +76,7 @@ class AppImagePrimer(BasePrimer):
     def _make_squashfs(self, appdir: pathlib.Path):
         payload_path = appdir.with_suffix(".squashfs")
         mksquashfs_bin = shell.require_executable("mksquashfs")
+        mksquashfs_comp = os.environ.get("MKSQUASHFS_COMP", "xz")
         command = [
             mksquashfs_bin,
             str(appdir),
@@ -84,7 +85,7 @@ class AppImagePrimer(BasePrimer):
             "-noappend",
             "-reproducible",
             "-comp",
-            "xz",
+            mksquashfs_comp
         ]
         mksquashfs_extra_args = shlex.split(os.environ["MKSQUASHFS_ARGS"])
         command.extend(mksquashfs_extra_args)

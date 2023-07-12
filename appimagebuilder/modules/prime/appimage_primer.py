@@ -13,6 +13,7 @@ import hashlib
 import logging
 import os
 import pathlib
+import shlex
 import shutil
 import stat
 import subprocess
@@ -85,6 +86,8 @@ class AppImagePrimer(BasePrimer):
             "-comp",
             "xz",
         ]
+        mksquashfs_extra_args = shlex.split(os.environ["MKSQUASHFS_ARGS"])
+        command.extend(mksquashfs_extra_args)
         self.logger.info("Creating squashfs from AppDir")
         self.logger.debug(" ".join(command))
         subprocess.run(command, check=True)
